@@ -15,3 +15,5 @@ Disclaimer: I [started learning Rust](https://gianluca.ai/tags/rust/) a few mont
 ## Notes
 
 I'm explicitly telling `main.rs` which other filenames (e.g. `day1.rs`) to consider modules and import (e.g. `mod day1;`) and then calling the public `run()` function for each, which prints the answers using the input from `data/day1.txt` (which is different every day and unique per user).
+
+TODO: look into profiling tools for Rust. Line profiling? How can I see if I'm actually making my code better/faster once I have it working?
