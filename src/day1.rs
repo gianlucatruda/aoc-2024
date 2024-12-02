@@ -3,7 +3,7 @@
 use std::{fs, iter::zip};
 
 fn parse_and_sort_lists() -> (Vec<u32>, Vec<u32>) {
-    let input = fs::read_to_string("input.txt").expect("Read input");
+    let input = fs::read_to_string("data/day1.txt").expect("Read input");
     let mut a: Vec<u32> = Vec::new();
     let mut b: Vec<u32> = Vec::new();
 
