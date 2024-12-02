@@ -34,10 +34,10 @@ pub fn part1(a: &Vec<u32>, b: &Vec<u32>) -> u32 {
         total += val;
     }
     println!("Day 1 part 1: {total}");
-    return total;
+    total
 }
 
-pub fn part2(a: &Vec<u32>, b: &Vec<u32>) -> u32 {
+pub fn part2(a: &[u32], b: &[u32]) -> u32 {
     let mut score: u32 = 0;
     for av in a.iter() {
         let mut hits = 0;
@@ -49,7 +49,7 @@ pub fn part2(a: &Vec<u32>, b: &Vec<u32>) -> u32 {
         score += av * hits;
     }
     println!("Day 1 part 2: {score}");
-    return score;
+    score
 }
 
 pub fn run() {
@@ -59,7 +59,7 @@ pub fn run() {
     part2(&a, &b);
 }
 
-const TESTCASE: &str = "\
+const _TESTCASE: &str = "\
 3   4
 4   3
 2   5
@@ -69,11 +69,11 @@ const TESTCASE: &str = "\
 
 #[test]
 fn p1() {
-    let (a, b) = parse_and_sort_lists(TESTCASE.to_string());
+    let (a, b) = parse_and_sort_lists(_TESTCASE.to_string());
     assert_eq!(part1(&a, &b), 11);
 }
 #[test]
 fn p2() {
-    let (a, b) = parse_and_sort_lists(TESTCASE.to_string());
+    let (a, b) = parse_and_sort_lists(_TESTCASE.to_string());
     assert_eq!(part2(&a, &b), 31);
 }
