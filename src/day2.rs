@@ -40,12 +40,9 @@ fn is_safe(report: Vec<i32>) -> bool {
 }
 
 fn part1(data: &[Vec<i32>]) -> u32 {
-    let mut sum = 0;
-    for vals in data.iter() {
-        if is_safe(vals.to_vec()) {
-            sum += 1;
-        }
-    }
+    let sum = data
+        .iter()
+        .fold(0, |a, x| if is_safe(x.to_vec()) { a + 1 } else { a + 0 });
     println!("Day 2 part 1: {sum}");
     sum
 }
@@ -58,7 +55,7 @@ fn part2(data: &[Vec<i32>]) -> u32 {
             sum += 1;
             continue;
         }
-        for (i, _) in report.iter().enumerate() {
+        for i in 0..report.len() {
             let mut r = report.clone();
             r.remove(i);
             // println!("{report:?} | {i:?} | {r:?}");
