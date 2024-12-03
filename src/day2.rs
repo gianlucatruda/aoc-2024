@@ -6,7 +6,7 @@ fn parse_to_matrix(input: String) -> Vec<Vec<i32>> {
     let mut data: Vec<Vec<i32>> = Vec::new();
     for line in input.lines() {
         // Account for empty lines (e.g. at EoF)
-        if line.len() < 1 {
+        if line.is_empty() {
             continue;
         }
         let vals: Vec<i32> = line
@@ -39,7 +39,7 @@ fn is_safe(report: Vec<i32>) -> bool {
     false
 }
 
-fn part1(data: &Vec<Vec<i32>>) -> u32 {
+fn part1(data: &[Vec<i32>]) -> u32 {
     let mut sum = 0;
     for vals in data.iter() {
         if is_safe(vals.to_vec()) {
@@ -50,7 +50,7 @@ fn part1(data: &Vec<Vec<i32>>) -> u32 {
     sum
 }
 
-fn part2(data: &Vec<Vec<i32>>) -> u32 {
+fn part2(data: &[Vec<i32>]) -> u32 {
     let mut sum = 0;
     for report in data.iter() {
         if is_safe(report.to_vec()) {
