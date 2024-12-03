@@ -58,19 +58,41 @@ fn part1(data: Vec<Vec<i32>>) -> u32 {
 
 fn part2(data: Vec<Vec<i32>>) -> u32 {
     let mut sum = 0;
-    for report in data.iter() {}
+    for report in data.iter() {
+        if is_safe(report.to_vec()) {
+            // println!("{report:?} is safe");
+            sum += 1;
+            continue;
+        }
+        for i in 0..5 {
+            let mut r = report.clone();
+            r.remove(i);
+            // println!("{report:?} | {i:?} | {r:?}");
+            if is_safe(r.to_vec()) {
+                // println!("{r:?} is safe");
+                sum += 1;
+                break;
+            }
+        }
+
+    }
     sum
 }
 
 pub fn run() {
     let input = parse_to_matrix(fs::read_to_string("data/day2.txt").expect("Reading day2 input"));
-    let a = part1(input);
+    let a = part1(input.clone());
     println!("Day 2 part 1: {a}");
-    println!("Day 2 part 2");
-    assert_eq!(part2(parse_to_matrix(TEST.to_string())), 4);
+    let b = part2(input.clone());
+    println!("Day 2 part 2: {b}");
 }
 
 #[test]
 fn p1() {
     assert_eq!(part1(parse_to_matrix(TEST.to_string())), 2);
+}
+
+#[test]
+fn p2() {
+    assert_eq!(part2(parse_to_matrix(TEST.to_string())), 4);
 }
