@@ -25,40 +25,49 @@ fn parse_to_matrix(input: String) -> Vec<Vec<i32>> {
     data
 }
 
+fn is_safe(report: Vec<i32>) -> bool {
+    let mut ds: Vec<i32> = Vec::new();
+    for (i, v) in report.iter().enumerate() {
+        if i == report.len() - 1 {
+            break;
+        }
+        ds.push(report[i + 1] - v);
+    }
+    let max = ds.iter().max().unwrap();
+    let min = ds.iter().min().unwrap();
+
+    // Utter dogshit
+    if 1 <= max.abs() && max.abs() <= 3 && 1 <= min.abs() && min.abs() <= 3 {
+        // What the fuck? Why do I have to dereference here?!?!?
+        if *max < 0 && *min < 0 || *max > 0 && *min > 0 {
+            return true;
+        }
+    }
+    false
+}
+
 fn part1(data: Vec<Vec<i32>>) -> u32 {
     let mut sum = 0;
     for vals in data.iter() {
-        let mut ds: Vec<i32> = Vec::new();
-        for (i, v) in vals.iter().enumerate() {
-            if i == vals.len() - 1 {
-                break;
-            }
-            ds.push(vals[i + 1] - v);
-        }
-        let max = ds.iter().max().unwrap();
-        let min = ds.iter().min().unwrap();
-
-        // Utter dogshit
-        if 1 <= max.abs() && max.abs() <= 3 && 1 <= min.abs() && min.abs() <= 3 {
-            // What the fuck? Why do I have to dereference here?!?!?
-            if *max < 0 && *min < 0 || *max > 0 && *min > 0 {
-                sum += 1;
-            }
+        if is_safe(vals.to_vec()) {
+            sum += 1;
         }
     }
     sum
 }
 
-// fn part2(data: Vec<Vec<i32>>) -> u32 {
-//     0
-// }
+fn part2(data: Vec<Vec<i32>>) -> u32 {
+    let mut sum = 0;
+    for report in data.iter() {}
+    sum
+}
 
 pub fn run() {
     let input = parse_to_matrix(fs::read_to_string("data/day2.txt").expect("Reading day2 input"));
     let a = part1(input);
-    println!("Day 2 part 1: {a:}");
+    println!("Day 2 part 1: {a}");
     println!("Day 2 part 2");
-    // assert_eq!(part2(parse_to_matrix(TEST.to_string())), 4);
+    assert_eq!(part2(parse_to_matrix(TEST.to_string())), 4);
 }
 
 #[test]
