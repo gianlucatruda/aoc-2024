@@ -24,7 +24,7 @@ fn parse_and_sort_lists(input: String) -> (Vec<u32>, Vec<u32>) {
     (a, b)
 }
 
-pub fn part1(a: &Vec<u32>, b: &Vec<u32>) -> u32 {
+fn part1(a: &Vec<u32>, b: &Vec<u32>) -> u32 {
     let mut total: u32 = 0;
     for (l, r) in zip(a, b) {
         let val = match l >= r {
@@ -37,7 +37,7 @@ pub fn part1(a: &Vec<u32>, b: &Vec<u32>) -> u32 {
     total
 }
 
-pub fn part2(a: &[u32], b: &[u32]) -> u32 {
+fn part2(a: &[u32], b: &[u32]) -> u32 {
     let mut score: u32 = 0;
     for av in a.iter() {
         let mut hits = 0;

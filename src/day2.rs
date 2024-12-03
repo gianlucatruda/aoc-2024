@@ -1,3 +1,5 @@
+// https://adventofcode.com/2024/day/2
+
 use std::fs;
 
 fn parse_to_matrix(input: String) -> Vec<Vec<i32>> {
@@ -44,6 +46,7 @@ fn part1(data: &Vec<Vec<i32>>) -> u32 {
             sum += 1;
         }
     }
+    println!("Day 2 part 1: {sum}");
     sum
 }
 
@@ -66,32 +69,30 @@ fn part2(data: &Vec<Vec<i32>>) -> u32 {
             }
         }
     }
+    println!("Day 2 part 2: {sum}");
     sum
 }
 
 pub fn run() {
     let input = parse_to_matrix(fs::read_to_string("data/day2.txt").expect("Reading day2 input"));
-    let a = part1(&input);
-    println!("Day 2 part 1: {a}");
-    let b = part2(&input);
-    println!("Day 2 part 2: {b}");
+    part1(&input);
+    part2(&input);
 }
 
-const TEST: &str = "\
+const _TESTCASE: &str = "\
 7 6 4 2 1
 1 2 7 8 9
 9 7 6 2 1
 1 3 2 4 5
 8 6 4 4 1
-1 3 6 7 9
-";
+1 3 6 7 9";
 
 #[test]
 fn p1() {
-    assert_eq!(part1(&parse_to_matrix(TEST.to_string())), 2);
+    assert_eq!(part1(&parse_to_matrix(_TESTCASE.to_string())), 2);
 }
 
 #[test]
 fn p2() {
-    assert_eq!(part2(&parse_to_matrix(TEST.to_string())), 4);
+    assert_eq!(part2(&parse_to_matrix(_TESTCASE.to_string())), 4);
 }
