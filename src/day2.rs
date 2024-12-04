@@ -42,7 +42,7 @@ fn is_safe(report: Vec<i32>) -> bool {
 fn part1(data: &[Vec<i32>]) -> u32 {
     let sum = data
         .iter()
-        .fold(0, |a, x| if is_safe(x.to_vec()) { a + 1 } else { a + 0 });
+        .fold(0, |a, x| if is_safe(x.to_vec()) { a + 1 } else { a });
     println!("Day 2 part 1: {sum}");
     sum
 }
