@@ -1,20 +1,21 @@
 use std::fs;
 
 fn part1(input: &str) -> i32 {
-    let mut sum: i32 = 0;
-    for hit in input.split("mul(").skip(1) {
-        if let Some((pair, _)) = hit.split_once(")") {
-            if let Some((left, right)) = pair.split_once(",") {
-                if let (Ok(l), Ok(r)) = (left.parse::<u16>(), right.parse::<u16>()) {
-                    if (1..=999).contains(&l) && (1..=999).contains(&r) {
-                        sum += (l as i32) * (r as i32);
-                    }
-                }
+    input
+        .split("mul(")
+        .skip(1)
+        .filter_map(|hit| {
+            let (pair, _) = hit.split_once(')')?;
+            let (left, right) = pair.split_once(',')?;
+            let l: u16 = left.parse().ok()?;
+            let r: u16 = right.parse().ok()?;
+            if (1..=999).contains(&l) && (1..=999).contains(&r) {
+                Some((l as i32) * (r as i32))
+            } else {
+                None
             }
-        };
-    }
-
-    sum
+        })
+        .sum()
 }
 
 fn part2(input: &str) -> i32 {
