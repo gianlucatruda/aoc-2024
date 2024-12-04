@@ -15,10 +15,10 @@ fn part1(input: &str) -> i32 {
         let left: u16 = parts[0].parse().expect("Parse left value");
         let right: u16 = parts[1].parse().expect("Parse right value");
 
-        if left > 999 || left < 1 || right > 999 || right < 1 {
+        if !(1..=999).contains(&right) || !(1..=999).contains(&left) {
             continue;
         }
-        sum += ((left as i32) * (right as i32)) as i32;
+        sum += (left as i32) * (right as i32);
     }
 
     sum
