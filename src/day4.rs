@@ -1,7 +1,7 @@
 use std::fs;
 // https://adventofcode.com/2024/day/4
 
-fn add_run_in_dir(data: &Vec<Vec<char>>, r: usize, c: usize, x: i32, y: i32) -> i32 {
+fn add_run_in_dir(data: &[Vec<char>], r: usize, c: usize, x: i32, y: i32) -> i32 {
     for (i, l) in ['M', 'A', 'S'].iter().enumerate() {
         let a = (r as i32) + (x * (i + 1) as i32);
         let b = (c as i32) + (y * (i + 1) as i32);
@@ -16,13 +16,17 @@ fn add_run_in_dir(data: &Vec<Vec<char>>, r: usize, c: usize, x: i32, y: i32) -> 
     1
 }
 
-fn part1(input: &str) -> i32 {
-    let mut sum = 0;
-    let data: Vec<Vec<char>> = input
+fn matrixify(input: &str) -> Vec<Vec<char>> {
+    input
         .lines()
         .filter(|line| !line.is_empty())
         .map(|line| line.chars().collect())
-        .collect();
+        .collect()
+}
+
+fn part1(input: &str) -> i32 {
+    let data = matrixify(input);
+    let mut sum = 0;
     for (r, row) in data.iter().enumerate() {
         for (c, char) in row.iter().enumerate() {
             if *char == 'X' {
@@ -44,11 +48,7 @@ fn part1(input: &str) -> i32 {
 
 fn part2(input: &str) -> i32 {
     let mut sum = 0;
-    let data: Vec<Vec<char>> = input
-        .lines()
-        .filter(|line| !line.is_empty())
-        .map(|line| line.chars().collect())
-        .collect();
+    let data = matrixify(input);
     for (r, row) in data.iter().enumerate().skip(1).take(data.len() - 2) {
         for (c, char) in row.iter().enumerate().skip(1).take(data[0].len() - 2) {
             if *char == 'A' {
