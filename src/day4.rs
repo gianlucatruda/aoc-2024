@@ -42,6 +42,56 @@ fn part1(input: &str) -> i32 {
     sum
 }
 
+fn part2(input: &str) -> i32 {
+    let mut sum = 0;
+    let data: Vec<Vec<char>> = input
+        .lines()
+        .filter(|line| !line.is_empty())
+        .map(|line| line.chars().collect())
+        .collect();
+    for (r, row) in data.iter().enumerate().skip(1).take(data.len() - 2) {
+        for (c, char) in row.iter().enumerate().skip(1).take(data[0].len() - 2) {
+            if *char == 'A' {
+                let mut arms = 0;
+                // Up and left
+                match data[r - 1][c - 1] {
+                    'M' => {
+                        // Down and right
+                        match data[r + 1][c + 1] {
+                            'S' => arms += 1,
+                            _ => continue,
+                        }
+                    }
+                    'S' => {
+                        // Down and right
+                        match data[r + 1][c + 1] {
+                            'M' => arms += 1,
+                            _ => continue,
+                        }
+                    }
+                    _ => continue,
+                }
+                // Down and left
+                match data[r + 1][c - 1] {
+                    'M' => match data[r - 1][c + 1] {
+                        'S' => arms += 1,
+                        _ => continue,
+                    },
+                    'S' => match data[r - 1][c + 1] {
+                        'M' => arms += 1,
+                        _ => continue,
+                    },
+                    _ => continue,
+                }
+                if arms == 2 {
+                    sum += 1;
+                }
+            }
+        }
+    }
+    sum
+}
+
 const _TESTCASE: &str = "\
 MMMSXXMASM
 MSAMXMSMSA
@@ -56,12 +106,21 @@ MXMXAXMASX
 ";
 
 pub fn run() {
+    assert_eq!(part2(_TESTCASE), 9);
+
     let input = fs::read_to_string("data/day4.txt").expect("Read day4.txt");
     let a = part1(&input);
     println!("Day 4 part 1: {a}");
+    let b = part2(&input);
+    println!("Day 4 part 2: {b}");
 }
 
 #[test]
 fn p1() {
     assert_eq!(part1(_TESTCASE), 18);
+}
+
+#[test]
+fn p2() {
+    assert_eq!(part2(_TESTCASE), 9);
 }
