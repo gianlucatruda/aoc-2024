@@ -18,10 +18,11 @@ Disclaimer: I [started learning Rust](https://gianluca.ai/tags/rust/) a few mont
     - [x] Part 1
     - [x] Part 2
     - [x] Optimised
-- [ ] Day 4
+- [x] Day 4
     - [x] Part 1
     - [x] Part 2
-    - [ ] Optimised
+    - [x] Optimised
+- [ ] Day 5
 
 ## Notes
 
