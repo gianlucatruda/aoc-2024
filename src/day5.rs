@@ -39,7 +39,7 @@ fn assess_updates(
     updates: &Vec<Vec<u16>>,
 ) -> (Vec<Vec<u16>>, Vec<Vec<u16>>) {
     let (mut valid, mut invalid) = (Vec::new(), Vec::new());
-    for update in updates.iter() {
+    for (i, update) in updates.iter().enumerate() {
         let mut violated = false;
         for rule in rules.iter() {
             if violation(update, rule).is_some() {
@@ -65,15 +65,36 @@ fn part1(input: &str) -> i32 {
 }
 
 fn part2(input: &str) -> i32 {
+    let mut sum = 0;
     let (rules, updates) = parse_inp(input);
-    for update in updates.iter() {
-        for rule in rules.iter() {
-            if let Some((i_0, i_1)) = violation(update, rule) {
-                println!("! {update:?} violates {rule:?} | ({i_0},{i_1})");
+    let (_, og_invalid) = assess_updates(&rules, &updates);
+    let (_, mut invalid) = assess_updates(&rules, &updates);
+    while invalid.len() > 0 {
+        let invlen = invalid.len();
+        println!("Len of invalid: {invlen}");
+        for update in invalid.iter_mut() {
+            for rule in rules.iter() {
+                if let Some((i_0, i_1)) = violation(update, rule) {
+                    // println!("! {update:?} violates {rule:?} | ({i_0},{i_1})");
+                    // Cheeky swap
+                    let a = update[i_0];
+                    let b = update[i_1];
+                    update[i_1] = a;
+                    update[i_0] = b;
+                    // println!("Post swap: {update:?} vs {rule:?}");
+                }
+            }
+            if rules
+                .iter()
+                .map(|r| violation(update, r).is_none())
+                .all(|x| x == true)
+            {
+                sum += update[update.len() / 2];
             }
         }
+        (_, invalid) = assess_updates(&rules, &invalid);
     }
-    0
+    sum.into()
 }
 
 const _TESTCASE: &str = "\
