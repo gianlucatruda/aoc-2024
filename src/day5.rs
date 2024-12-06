@@ -22,28 +22,58 @@ fn parse_inp(input: &str) -> (Vec<(u16, u16)>, Vec<Vec<u16>>) {
     )
 }
 
-fn part1(input: &str) -> i32 {
-    let mut sum = 0;
-    let (rules, updates) = parse_inp(input);
+fn violation(update: &Vec<u16>, rule: &(u16, u16)) -> Option<(usize, usize)> {
+    // Check if update violates rule
+    if let Some(i_0) = update.iter().position(|&x| x == rule.0) {
+        if let Some(i_1) = update.iter().position(|&x| x == rule.1) {
+            if i_0 > i_1 {
+                return Some((i_0, i_1));
+            }
+        }
+    }
+    None
+}
+
+fn assess_updates(
+    rules: &Vec<(u16, u16)>,
+    updates: &Vec<Vec<u16>>,
+) -> (Vec<Vec<u16>>, Vec<Vec<u16>>) {
+    let (mut valid, mut invalid) = (Vec::new(), Vec::new());
     for update in updates.iter() {
         let mut violated = false;
         for rule in rules.iter() {
-            // Check if update violates rule
-            if let Some(i_0) = update.iter().position(|&x| x == rule.0) {
-                if let Some(i_1) = update.iter().position(|&x| x == rule.1) {
-                    if i_0 > i_1 {
-                        violated = true;
-                        break;
-                    }
-                }
+            if violation(update, rule).is_some() {
+                violated = true;
+                invalid.push(update.clone());
+                break;
             }
         }
         if !violated {
-            let mid = update[update.len() / 2];
-            sum += mid;
+            valid.push(update.clone());
         }
     }
-    sum.into()
+    (valid, invalid)
+}
+fn part1(input: &str) -> i32 {
+    let (rules, updates) = parse_inp(input);
+    let (valid, _) = assess_updates(&rules, &updates);
+    valid
+        .iter()
+        .map(|update| update[update.len() / 2])
+        .sum::<u16>()
+        .into()
+}
+
+fn part2(input: &str) -> i32 {
+    let (rules, updates) = parse_inp(input);
+    for update in updates.iter() {
+        for rule in rules.iter() {
+            if let Some((i_0, i_1)) = violation(update, rule) {
+                println!("! {update:?} violates {rule:?} | ({i_0},{i_1})");
+            }
+        }
+    }
+    0
 }
 
 const _TESTCASE: &str = "\
@@ -80,8 +110,10 @@ const _TESTCASE: &str = "\
 
 pub fn run() {
     assert_eq!(part1(_TESTCASE), 143);
-    // assert_eq!(part2(_TESTCASE), 123);
     let input = fs::read_to_string("data/day5.txt").expect("Reading day5.txt");
     let a = part1(&input);
     println!("Day 5 part 1: {a}");
+    assert_eq!(part2(_TESTCASE), 123);
+    let b = part2(&input);
+    println!("Day 5 part 2: {b}");
 }
