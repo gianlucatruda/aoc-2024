@@ -1,19 +1,26 @@
 // https://adventofcode.com/2024/day/5
 
 use std::fs;
+type Rule = (u16, u16);
+type Update = Vec<u16>;
 
-fn parse_inp(input: &str) -> (Vec<(u16, u16)>, Vec<Vec<u16>>) {
+fn parse_inp(input: &str) -> (Vec<Rule>, Vec<Update>) {
     let (rstr, ustr) = input.split_once("\n\n").expect("Parsing input");
-
     (
         rstr.lines()
             .filter_map(|l| l.split_once("|"))
-            .filter_map(|(l, r)| Some((l.parse::<u16>().unwrap(), r.parse::<u16>().unwrap())))
+            .filter_map(|(l, r)| {
+                if let (Ok(left), Ok(right)) = (l.parse(), r.parse()) {
+                    Some((left, right))
+                } else {
+                    None
+                }
+            })
             .collect(),
         ustr.lines()
             .filter_map(|line| {
                 if !line.is_empty() {
-                    Some(line.split(',').map(|s| s.parse().unwrap()).collect())
+                    Some(line.split(',').filter_map(|s| s.parse().ok()).collect())
                 } else {
                     None
                 }
@@ -22,7 +29,7 @@ fn parse_inp(input: &str) -> (Vec<(u16, u16)>, Vec<Vec<u16>>) {
     )
 }
 
-fn violation(update: &Vec<u16>, rule: &(u16, u16)) -> Option<(usize, usize)> {
+fn violation(update: &Update, rule: &Rule) -> Option<(usize, usize)> {
     // Check if update violates rule
     if let Some(i_0) = update.iter().position(|&x| x == rule.0) {
         if let Some(i_1) = update.iter().position(|&x| x == rule.1) {
@@ -34,10 +41,7 @@ fn violation(update: &Vec<u16>, rule: &(u16, u16)) -> Option<(usize, usize)> {
     None
 }
 
-fn assess_updates(
-    rules: &Vec<(u16, u16)>,
-    updates: &Vec<Vec<u16>>,
-) -> (Vec<Vec<u16>>, Vec<Vec<u16>>) {
+fn assess_updates(rules: &[Rule], updates: &[Update]) -> (Vec<Update>, Vec<Update>) {
     let (mut valid, mut invalid) = (Vec::new(), Vec::new());
     for update in updates.iter() {
         let mut violated = false;
@@ -68,7 +72,7 @@ fn part2(input: &str) -> i32 {
     let mut sum = 0;
     let (rules, updates) = parse_inp(input);
     let (_, mut invalid) = assess_updates(&rules, &updates);
-    while invalid.len() > 0 {
+    while !invalid.is_empty() {
         for update in invalid.iter_mut() {
             for rule in rules.iter() {
                 if let Some((i_0, i_1)) = violation(update, rule) {
@@ -82,7 +86,7 @@ fn part2(input: &str) -> i32 {
             if rules
                 .iter()
                 .map(|r| violation(update, r).is_none())
-                .all(|x| x == true)
+                .all(|x| x)
             {
                 sum += update[update.len() / 2];
             }
@@ -121,7 +125,6 @@ const _TESTCASE: &str = "\
 75,97,47,61,53
 61,13,29
 97,13,75,29,47
-
 ";
 
 pub fn run() {
