@@ -39,7 +39,7 @@ fn assess_updates(
     updates: &Vec<Vec<u16>>,
 ) -> (Vec<Vec<u16>>, Vec<Vec<u16>>) {
     let (mut valid, mut invalid) = (Vec::new(), Vec::new());
-    for (i, update) in updates.iter().enumerate() {
+    for update in updates.iter() {
         let mut violated = false;
         for rule in rules.iter() {
             if violation(update, rule).is_some() {
@@ -67,21 +67,16 @@ fn part1(input: &str) -> i32 {
 fn part2(input: &str) -> i32 {
     let mut sum = 0;
     let (rules, updates) = parse_inp(input);
-    let (_, og_invalid) = assess_updates(&rules, &updates);
     let (_, mut invalid) = assess_updates(&rules, &updates);
     while invalid.len() > 0 {
-        let invlen = invalid.len();
-        println!("Len of invalid: {invlen}");
         for update in invalid.iter_mut() {
             for rule in rules.iter() {
                 if let Some((i_0, i_1)) = violation(update, rule) {
-                    // println!("! {update:?} violates {rule:?} | ({i_0},{i_1})");
                     // Cheeky swap
                     let a = update[i_0];
                     let b = update[i_1];
                     update[i_1] = a;
                     update[i_0] = b;
-                    // println!("Post swap: {update:?} vs {rule:?}");
                 }
             }
             if rules
@@ -130,11 +125,18 @@ const _TESTCASE: &str = "\
 ";
 
 pub fn run() {
-    assert_eq!(part1(_TESTCASE), 143);
     let input = fs::read_to_string("data/day5.txt").expect("Reading day5.txt");
     let a = part1(&input);
     println!("Day 5 part 1: {a}");
-    assert_eq!(part2(_TESTCASE), 123);
     let b = part2(&input);
     println!("Day 5 part 2: {b}");
+}
+
+#[test]
+fn p1() {
+    assert_eq!(part1(_TESTCASE), 143);
+}
+#[test]
+fn p2() {
+    assert_eq!(part2(_TESTCASE), 123);
 }

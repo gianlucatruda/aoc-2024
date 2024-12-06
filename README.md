@@ -22,7 +22,9 @@ Disclaimer: I [started learning Rust](https://gianluca.ai/tags/rust/) a few mont
     - [x] Part 1
     - [x] Part 2
     - [x] Optimised
-- [ ] Day 5
+- [x] Day 5
+    - [x] Part 1
+    - [x] Part 2
 
 ## Notes
 
