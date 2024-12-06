@@ -76,11 +76,7 @@ fn part2(input: &str) -> i32 {
         for update in invalid.iter_mut() {
             for rule in rules.iter() {
                 if let Some((i_0, i_1)) = violation(update, rule) {
-                    // Cheeky swap
-                    let a = update[i_0];
-                    let b = update[i_1];
-                    update[i_1] = a;
-                    update[i_0] = b;
+                    update.swap(i_0, i_1);
                 }
             }
             if rules
