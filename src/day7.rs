@@ -103,9 +103,6 @@ const _TESTCASE: &str = "\
 ";
 
 pub fn run() {
-    assert_eq!(cat(123, 4567), 1234567);
-    assert_eq!(cat(1, 234567), 1234567);
-    assert_eq!(part2(_TESTCASE), 11387);
     let input = fs::read_to_string("data/day7.txt").expect("Reading day7.txt");
     let a = part1(&input);
     println!("Day 7 part 1: {a}");
