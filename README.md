@@ -33,7 +33,8 @@ Disclaimer: I [started learning Rust](https://gianluca.ai/tags/rust/) a few mont
 - [x] Day 7
     - [x] Part 1
     - [x] Part 2
-    - [ ] Optimised
+    - [x] Optimised (more efficient `cat`)
+    - [ ] Maybe: Write own permutations func to replace itertools dep
 
 ## Notes
 

@@ -33,8 +33,8 @@ fn parse_lines(input: &str) -> Vec<Eqn> {
 }
 
 fn cat(a: u64, b: u64) -> u64 {
-    {a.to_string() + &b.to_string()}.parse().unwrap()
-
+    let d = (b as u32).ilog10() + 1;
+    a * 10_u64.pow(d) + b
 }
 
 fn calc(parts: &[u64], perm: &[Op]) -> u64 {
@@ -103,9 +103,9 @@ const _TESTCASE: &str = "\
 ";
 
 pub fn run() {
-    // assert_eq!(cat(123, 4567), 1234567);
-    // assert_eq!(cat(1, 234567), 1234567);
-    // assert_eq!(part2(_TESTCASE), 11387);
+    assert_eq!(cat(123, 4567), 1234567);
+    assert_eq!(cat(1, 234567), 1234567);
+    assert_eq!(part2(_TESTCASE), 11387);
     let input = fs::read_to_string("data/day7.txt").expect("Reading day7.txt");
     let a = part1(&input);
     println!("Day 7 part 1: {a}");
