@@ -1,7 +1,14 @@
 use core::panic;
+use itertools::{repeat_n, Itertools};
 use std::fs;
 
 type Eqn = (u64, Vec<u64>);
+
+#[derive(Debug, Clone)]
+enum Op {
+    Plus,
+    Times,
+}
 
 fn parse_lines(input: &str) -> Vec<Eqn> {
     input
@@ -18,15 +25,51 @@ fn parse_lines(input: &str) -> Vec<Eqn> {
                 );
                 this
             } else {
-                panic!();
+                panic!("Summit ain't right 'arry");
             }
         })
         .collect()
 }
 
+fn calc(parts: &[u64], perm: &Vec<Op>) -> u64 {
+    let mut total = parts[0];
+    let mut i = 0;
+    while i < perm.len() {
+        match perm[i] {
+            Op::Plus => total += parts[i + 1],
+            Op::Times => total *= parts[i + 1],
+        }
+        i += 1;
+    }
+    total
+}
+
+fn valid(eq: &Eqn) -> bool {
+    // println!("{eq:?}");
+    let (t, parts) = eq;
+    let perms =
+        repeat_n(vec![Op::Plus, Op::Times].into_iter(), parts.len() - 1).multi_cartesian_product();
+    for perm in perms {
+        // println!("{perm:?}");
+        if calc(parts, &perm) == *t {
+            // println!("Solved: {eq:?} with {perm:?}");
+            return true;
+        }
+    }
+
+    false
+}
+
 fn part1(input: &str) -> u64 {
-    parse_lines(input);
-    0
+    let equations = parse_lines(input);
+    let mut sum = 0;
+    for eq in equations.iter() {
+        if valid(&eq) {
+            sum += eq.0;
+        }
+    }
+
+    sum
 }
 
 const _TESTCASE: &str = "\
@@ -39,11 +82,12 @@ const _TESTCASE: &str = "\
 192: 17 8 14
 21037: 9 7 18 13
 292: 11 6 16 20
-
 ";
 
 pub fn run() {
     println!("Day 7");
-    part1(&fs::read_to_string("data/day7.txt").unwrap());
     assert_eq!(part1(_TESTCASE), 3749);
+    let input = fs::read_to_string("data/day7.txt").expect("Reading day7.txt");
+    let a = part1(&input);
+    println!("Day 7 part 1: {a}");
 }
