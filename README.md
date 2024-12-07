@@ -29,10 +29,11 @@ Disclaimer: I [started learning Rust](https://gianluca.ai/tags/rust/) a few mont
 - [x] Day 6
     - [x] Part 1
     - [x] Part 2 (~15s in dev, ~1.1s in release)
+    - [x] Optimised (I tried, at least)
+- [x] Day 7
+    - [x] Part 1
+    - [x] Part 2
     - [ ] Optimised
-- [ ] Day 7
-    - [ ] Part 1
-    - [ ] Part 2
 
 ## Notes
 
