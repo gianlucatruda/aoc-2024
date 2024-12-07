@@ -20,8 +20,7 @@ fn parse_grid_guard(input: &str) -> (Vec<Vec<char>>, (isize, isize)) {
     (grid, guard)
 }
 
-fn log_route(grid: &[Vec<char>], guard: (isize, isize)) -> (HashMap<(isize, isize), i32>, bool) {
-    let mut guard = guard.clone();
+fn log_route(grid: &[Vec<char>], mut guard: (isize, isize)) -> (HashMap<(isize, isize), i32>, bool) {
     let (m, n) = (grid.len() as isize, grid[0].len() as isize);
     let mut logs = HashMap::new();
     logs.insert(guard, 1); // Starting positions counts
@@ -60,8 +59,6 @@ fn log_route(grid: &[Vec<char>], guard: (isize, isize)) -> (HashMap<(isize, isiz
         }
     }
 
-    let total: i32 = logs.iter().map(|(_, v)| v).sum();
-    // println!("Total moves: {total}");
     (logs, has_loop)
 }
 
@@ -72,23 +69,22 @@ fn part1(input: &str) -> i32 {
 }
 
 fn part2(input: &str) -> i32 {
-    // This is disgustingly inefficient
     let (grid, guard) = parse_grid_guard(input);
+    let (logs, _) = log_route(&grid, guard);
+
     let mut mgrid = grid.clone();
     let mut loops = 0;
-
-    for (i, row) in grid.iter().enumerate() {
-        for (j, c) in row.iter().enumerate() {
-            if *c != '#' {
-                // println!("Trying: ({i},{j})");
-                mgrid[i][j] = '#';
-                let (_, hasloop) = log_route(&mgrid, guard);
-                if hasloop {
-                    loops += 1;
-                }
-                // Reset state
-                mgrid[i][j] = '.';
+    // Only consider positions on the existing path
+    for ((i, j), _) in logs.iter() {
+        if grid[*i as usize][*j as usize] != '#' {
+            // println!("Trying: ({i},{j})");
+            mgrid[*i as usize][*j as usize] = '#';
+            let (_, hasloop) = log_route(&mgrid, guard);
+            if hasloop {
+                loops += 1;
             }
+            // Reset state
+            mgrid[*i as usize][*j as usize] = '.';
         }
     }
 
@@ -112,7 +108,6 @@ pub fn run() {
     let input = fs::read_to_string("data/day6.txt").expect("Reading day6.txt");
     let a = part1(&input);
     println!("Day 6 part 1: {a}");
-    assert_eq!(part2(_TESTCASE), 6);
     let b = part2(&input);
     println!("Day 6 part 2: {b}");
 }

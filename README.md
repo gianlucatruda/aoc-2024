@@ -28,7 +28,8 @@ Disclaimer: I [started learning Rust](https://gianluca.ai/tags/rust/) a few mont
     - [x] Optimised
 - [ ] Day 6
     - [x] Part 1
-    - [ ] Part 2
+    - [x] Part 2 (~15s in dev, ~1s in release)
+    - [ ] Optimised
 
 ## Notes
 
