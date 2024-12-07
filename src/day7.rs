@@ -31,7 +31,7 @@ fn parse_lines(input: &str) -> Vec<Eqn> {
         .collect()
 }
 
-fn calc(parts: &[u64], perm: &Vec<Op>) -> u64 {
+fn calc(parts: &[u64], perm: &[Op]) -> u64 {
     let mut total = parts[0];
     let mut i = 0;
     while i < perm.len() {
@@ -64,7 +64,7 @@ fn part1(input: &str) -> u64 {
     let equations = parse_lines(input);
     let mut sum = 0;
     for eq in equations.iter() {
-        if valid(&eq) {
+        if valid(eq) {
             sum += eq.0;
         }
     }
@@ -86,8 +86,12 @@ const _TESTCASE: &str = "\
 
 pub fn run() {
     println!("Day 7");
-    assert_eq!(part1(_TESTCASE), 3749);
     let input = fs::read_to_string("data/day7.txt").expect("Reading day7.txt");
     let a = part1(&input);
     println!("Day 7 part 1: {a}");
+}
+
+#[test]
+fn p1() {
+    assert_eq!(part1(_TESTCASE), 3749);
 }
