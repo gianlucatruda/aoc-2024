@@ -1,3 +1,5 @@
+// https://adventofcode.com/2024/day/6
+
 use std::{collections::HashMap, fs};
 
 fn parse_grid_guard(input: &str) -> (Vec<Vec<char>>, (isize, isize)) {
@@ -20,7 +22,10 @@ fn parse_grid_guard(input: &str) -> (Vec<Vec<char>>, (isize, isize)) {
     (grid, guard)
 }
 
-fn log_route(grid: &[Vec<char>], mut guard: (isize, isize)) -> (HashMap<(isize, isize), i32>, bool) {
+fn log_route(
+    grid: &[Vec<char>],
+    mut guard: (isize, isize),
+) -> (HashMap<(isize, isize), i32>, bool) {
     let (m, n) = (grid.len() as isize, grid[0].len() as isize);
     let mut logs = HashMap::new();
     logs.insert(guard, 1); // Starting positions counts
@@ -47,7 +52,6 @@ fn log_route(grid: &[Vec<char>], mut guard: (isize, isize)) -> (HashMap<(isize, 
             match logs.get(&guard) {
                 Some(&v) => {
                     if v > 2 {
-                        // println!("Possible loop");
                         has_loop = true;
                         break;
                     }
@@ -55,7 +59,6 @@ fn log_route(grid: &[Vec<char>], mut guard: (isize, isize)) -> (HashMap<(isize, 
                 }
                 _ => logs.insert(guard, 1),
             };
-            // println!("Gaurd after step: {guard:?}");
         }
     }
 
@@ -77,7 +80,6 @@ fn part2(input: &str) -> i32 {
     // Only consider positions on the existing path
     for ((i, j), _) in logs.iter() {
         if grid[*i as usize][*j as usize] != '#' {
-            // println!("Trying: ({i},{j})");
             mgrid[*i as usize][*j as usize] = '#';
             let (_, hasloop) = log_route(&mgrid, guard);
             if hasloop {
