@@ -35,6 +35,9 @@ Disclaimer: I [started learning Rust](https://gianluca.ai/tags/rust/) a few mont
     - [x] Part 2
     - [x] Optimised (more efficient `cat` for ~4x speedup)
     - [ ] Maybe: Write own permutations func to replace itertools dep
+- [ ] Day 8
+    - [x] Part 1
+    - [ ] Part 2
 
 ## Notes
 

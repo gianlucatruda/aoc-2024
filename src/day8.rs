@@ -3,6 +3,8 @@ use std::{
     fs,
 };
 
+use std::cmp;
+
 use itertools::Itertools;
 
 const _TESTCASE: &str = "\
@@ -46,13 +48,45 @@ fn locate_antinodes(a: (usize, usize), b: (usize, usize)) -> Vec<(usize, usize)>
     let dy = a.0.abs_diff(b.0);
     let dx = a.1.abs_diff(b.1);
     let mut res = Vec::new();
-    if a.0 as isize - dy as isize > 0 && a.1 as isize - dx as isize > 0 {
-        res.push((a.0 - dy, a.1 - dx));
+
+    let left = (
+        a.0 as isize - (b.0 as isize - a.0 as isize),
+        a.1 as isize - (b.1 as isize - a.1 as isize),
+    );
+    println!("left: {left:?}");
+    let right = (
+        b.0 as isize + (b.0 as isize - a.0 as isize),
+        b.1 as isize + (b.1 as isize - a.1 as isize),
+    );
+    println!("right: {right:?}");
+
+    if left.0 >= 0 && left.1 >= 0 {
+        res.push((left.0 as usize, left.1 as usize));
     }
-    res.push((b.0 + dy, b.1 + dx));
+    if right.0 >= 0 && right.1 >= 0 {
+        res.push((right.0 as usize, right.1 as usize));
+    }
+
+    // if a.0 as isize - dy as isize > 0 && a.1 as isize - dx as isize > 0 {
+    //     res.push((a.0 - dy, a.1 - dx));
+    // }
+    // res.push((b.0 + dy, b.1 + dx));
 
     // vec![(a.0 - dy, a.1 - dx), (b.0 + dy, b.1 + dx)]
     res
+}
+
+fn print_antinode_grid(grid: &Vec<Vec<char>>, uniqs: &HashSet<(usize, usize)>) {
+    for (i, row) in grid.iter().enumerate() {
+        for (j, c) in row.iter().enumerate() {
+            if uniqs.contains(&(i, j)) {
+                print!("#");
+            } else {
+                print!("{}", *c);
+            }
+        }
+        print!("\n");
+    }
 }
 
 fn part1(input: &str) -> i32 {
@@ -72,20 +106,10 @@ fn part1(input: &str) -> i32 {
                 if an.0 < m && an.1 < n {
                     uniqs.insert(an.clone());
                     println!("Antenode ({}): {:?}", *c, an);
+                    print_antinode_grid(&grid, &uniqs);
                 }
             }
         }
-    }
-
-    for (i, row) in grid.iter().enumerate() {
-        for (j, c) in row.iter().enumerate() {
-            if uniqs.contains(&(i, j)) {
-                print!("#");
-            } else {
-                print!("{}", *c);
-            }
-        }
-        print!("\n");
     }
 
     uniqs.len().try_into().unwrap()
@@ -94,7 +118,7 @@ fn part1(input: &str) -> i32 {
 pub fn run() {
     println!("\nday 8...");
     assert_eq!(locate_antinodes((3, 4), (5, 5)), vec![(1, 3), (7, 6)]);
-    // assert_eq!(part1(_TESTCASE), 14);
+    assert_eq!(part1(_TESTCASE), 14);
     let input = fs::read_to_string("data/day8.txt").expect("Read day8.txt");
     let a = part1(&input);
     println!("Day 8 part 1: {a}");
