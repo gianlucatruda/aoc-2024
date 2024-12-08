@@ -1,4 +1,4 @@
-use std::fs;
+use std::{collections::HashMap, fs};
 
 const _TESTCASE: &str = "\
 ............
@@ -24,9 +24,23 @@ fn parse_data(input: &str) -> Vec<Vec<char>> {
         .collect()
 }
 
+fn get_coord_dic(data: Vec<Vec<char>>) -> HashMap<char, Vec<(usize, usize)>> {
+    let mut dic: HashMap<char, Vec<(usize, usize)>> = HashMap::new();
+    for (i, row) in data.iter().enumerate() {
+        for (j, c) in row.iter().enumerate() {
+            if *c == '.' {
+                continue;
+            }
+            dic.entry(*c).or_insert_with(Vec::new).push((i, j));
+        }
+    }
+    dic
+}
+
 fn part1(input: &str) -> i32 {
     let grid = parse_data(input);
-    println!("{grid:?}");
+    let coords = get_coord_dic(grid);
+    // println!("{coords:?}");
     0
 }
 
