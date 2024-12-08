@@ -3,8 +3,6 @@ use std::{
     fs,
 };
 
-use std::cmp;
-
 use itertools::Itertools;
 
 const _TESTCASE: &str = "\
@@ -38,41 +36,31 @@ fn get_coord_dic(data: &Vec<Vec<char>>) -> HashMap<char, Vec<(usize, usize)>> {
             if *c == '.' {
                 continue;
             }
-            dic.entry(*c).or_insert_with(Vec::new).push((i, j));
+            dic.entry(*c).or_default().push((i, j));
         }
     }
     dic
 }
 
 fn locate_antinodes(a: (usize, usize), b: (usize, usize)) -> Vec<(usize, usize)> {
-    let dy = a.0.abs_diff(b.0);
-    let dx = a.1.abs_diff(b.1);
     let mut res = Vec::new();
 
     let left = (
         a.0 as isize - (b.0 as isize - a.0 as isize),
         a.1 as isize - (b.1 as isize - a.1 as isize),
     );
-    println!("left: {left:?}");
+    if left.0 >= 0 && left.1 >= 0 {
+        res.push((left.0 as usize, left.1 as usize));
+    }
+
     let right = (
         b.0 as isize + (b.0 as isize - a.0 as isize),
         b.1 as isize + (b.1 as isize - a.1 as isize),
     );
-    println!("right: {right:?}");
-
-    if left.0 >= 0 && left.1 >= 0 {
-        res.push((left.0 as usize, left.1 as usize));
-    }
     if right.0 >= 0 && right.1 >= 0 {
         res.push((right.0 as usize, right.1 as usize));
     }
 
-    // if a.0 as isize - dy as isize > 0 && a.1 as isize - dx as isize > 0 {
-    //     res.push((a.0 - dy, a.1 - dx));
-    // }
-    // res.push((b.0 + dy, b.1 + dx));
-
-    // vec![(a.0 - dy, a.1 - dx), (b.0 + dy, b.1 + dx)]
     res
 }
 
@@ -85,7 +73,7 @@ fn print_antinode_grid(grid: &Vec<Vec<char>>, uniqs: &HashSet<(usize, usize)>) {
                 print!("{}", *c);
             }
         }
-        print!("\n");
+        println!();
     }
 }
 
@@ -96,17 +84,15 @@ fn part1(input: &str) -> i32 {
     let coords = get_coord_dic(&grid);
     // println!("{coords:?}");
     for (c, locs) in coords.iter() {
-        println!("Considering {c} ...");
-        let pairs: Vec<_> = locs.into_iter().combinations(2).collect();
-        println!("{pairs:?}");
-        for pair in pairs.iter() {
-            println!("Considering: {:?} vs {:?}", *pair[0], *pair[1]);
+        // println!("Considering {c} ...");
+        for pair in locs.iter().combinations(2) {
+            // println!("Considering: {:?} vs {:?}", *pair[0], *pair[1]);
             let anodes = locate_antinodes(*pair[0], *pair[1]);
             for an in anodes.iter() {
                 if an.0 < m && an.1 < n {
-                    uniqs.insert(an.clone());
-                    println!("Antenode ({}): {:?}", *c, an);
-                    print_antinode_grid(&grid, &uniqs);
+                    uniqs.insert(*an);
+                    // println!("Antenode ({}): {:?}", *c, an);
+                    // print_antinode_grid(&grid, &uniqs);
                 }
             }
         }
@@ -116,10 +102,14 @@ fn part1(input: &str) -> i32 {
 }
 
 pub fn run() {
-    println!("\nday 8...");
     assert_eq!(locate_antinodes((3, 4), (5, 5)), vec![(1, 3), (7, 6)]);
     assert_eq!(part1(_TESTCASE), 14);
     let input = fs::read_to_string("data/day8.txt").expect("Read day8.txt");
     let a = part1(&input);
     println!("Day 8 part 1: {a}");
+}
+
+#[test]
+fn p1() {
+    assert_eq!(part1(_TESTCASE), 14);
 }
