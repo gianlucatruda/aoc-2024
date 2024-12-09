@@ -39,6 +39,10 @@ Disclaimer: I [started learning Rust](https://gianluca.ai/tags/rust/) a few mont
     - [x] Part 1
     - [x] Part 2
     - [x] Optimised (didn't really need it)
+- [ ] Day 9
+    - [ ] Part 1
+    - [ ] Part 2
+
 
 ## Notes
 
