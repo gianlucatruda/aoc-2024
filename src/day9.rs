@@ -4,8 +4,7 @@ fn chars_to_files(input: &str) -> Vec<(u32, u32)> {
     // Gross, surely there's a better way!?
     let mut chars: Vec<char> = input
         .lines()
-        .filter(|l| !l.is_empty())
-        .next()
+        .find(|l| !l.is_empty())
         .unwrap()
         .chars()
         .rev() // so I can .pop()
@@ -26,7 +25,7 @@ fn chars_to_files(input: &str) -> Vec<(u32, u32)> {
     files
 }
 
-fn files_to_seq(files: &Vec<(u32, u32)>) -> Vec<i32> {
+fn files_to_seq(files: &[(u32, u32)]) -> Vec<i32> {
     let mut seq = Vec::new();
     for (i, (full, free)) in files.iter().enumerate() {
         for _ in 0..(*full as usize) {
@@ -78,12 +77,22 @@ fn part1(input: &str) -> i64 {
         .fold(0, |acc, (i, v)| acc + (i as i64 * *v as i64))
 }
 
+// fn part2(input: &str) -> i64 {
+//     // let files = chars_to_files(input);
+//     // Starting from the highest file IDs (rightmost), try exactly once
+//     // To fit the file in the leftmost position
+//     // If it can fit, write both to result
+//     // Else don't move it
+//
+//     0
+// }
+
 const _TESTCASE: &str = "2333133121414131402";
 
 pub fn run() {
     let input = fs::read_to_string("data/day9.txt").expect("Reading day9.txt");
-    let a = part1(&input);
-    println!("Day 9 part 1: {a}");
+    println!("Day 9 part 1: {}", part1(&input));
+    // println!("Day 9 part 2 {}", part2(&input));
 }
 
 #[test]
@@ -91,3 +100,7 @@ fn p1() {
     assert_eq!(part1("12345"), 60);
     assert_eq!(part1(_TESTCASE), 1928);
 }
+// #[test]
+// fn p2() {
+//     assert_eq!(part2(_TESTCASE), 2858);
+// }
