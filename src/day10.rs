@@ -1,6 +1,35 @@
-use std::fs;
+use std::{collections::HashSet, fs};
 
 type Loc = (usize, usize);
+type Grid = Vec<Vec<u32>>;
+
+fn reachable_peaks((i0, j0): Loc, grid: &Grid) -> HashSet<Loc> {
+    let this = grid[i0][j0];
+    if this == 9 {
+        return HashSet::from([(i0 as usize, j0 as usize)]);
+    }
+    let mut peaks: HashSet<Loc> = HashSet::new();
+    let m = grid.len() as isize;
+    let dirs = [
+        (-1, 0), // Up
+        (0, 1),  // Right
+        (1, 0),  // Down
+        (0, -1), // Left
+    ];
+    for (di, dj) in dirs.iter() {
+        let (i, j) = (i0 as isize + di, j0 as isize + dj);
+        if i < 0 || i >= m || j < 0 || j >= m {
+            continue;
+        }
+        let next = grid[i as usize][j as usize];
+        // println!("{this:?} ({i0},{j0}) => {next:?} ({i},{j})");
+        if next == this + 1 {
+            let reachable = reachable_peaks((i as usize, j as usize), &grid);
+            peaks.extend(reachable);
+        }
+    }
+    peaks
+}
 
 fn part1(input: &str) -> i32 {
     let grid: Vec<Vec<u32>> = input
@@ -18,11 +47,14 @@ fn part1(input: &str) -> i32 {
     }
     println!("Trailheads found: {:?}\t{:?}", trailheads.len(), trailheads);
 
+    let mut sum = 0;
     for (i0, j0) in trailheads.iter() {
-        println!("{i0}, {j0}");
+        // println!("Trailhead: {i0}, {j0}");
+        let score = reachable_peaks((*i0, *j0), &grid).len();
+        sum += score;
+        println!("Trailhead: {i0}, {j0}\tscore: {score}");
     }
-
-    0
+    sum.try_into().unwrap()
 }
 
 const _TESTCASE: &str = "\
@@ -38,8 +70,13 @@ const _TESTCASE: &str = "\
 
 pub fn run() {
     println!("\n\nDay 10\n");
+    assert_eq!(part1(_TESTCASE), 36);
     let input = fs::read_to_string("data/day10.txt").expect("Reading day10.txt");
     let a = part1(&input);
     println!("Day 10 part 1: {a}");
+}
+
+#[test]
+fn p1() {
     assert_eq!(part1(_TESTCASE), 36);
 }
