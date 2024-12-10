@@ -9,6 +9,26 @@ const DIRS: [(isize, isize); 4] = [
     (0, -1), // Left
 ];
 
+fn parse_to_grid(input: &str) -> Grid {
+    input
+        .trim()
+        .lines()
+        .map(|l: &str| l.chars().map(|c: char| c.to_digit(10).unwrap()).collect())
+        .collect()
+}
+
+fn find_trailheads(grid: &Grid) -> Vec<Loc> {
+    let mut trailheads: Vec<Loc> = Vec::new();
+    for (i, row) in grid.iter().enumerate() {
+        for (j, v) in row.iter().enumerate() {
+            if *v == 0 {
+                trailheads.push((i, j));
+            }
+        }
+    }
+    trailheads
+}
+
 fn reachable_peaks((i0, j0): Loc, grid: &Grid) -> HashSet<Loc> {
     let this = grid[i0][j0];
     if this == 9 {
@@ -22,7 +42,6 @@ fn reachable_peaks((i0, j0): Loc, grid: &Grid) -> HashSet<Loc> {
             continue;
         }
         let next = grid[i as usize][j as usize];
-        // println!("{this:?} ({i0},{j0}) => {next:?} ({i},{j})");
         if next == this + 1 {
             let reachable = reachable_peaks((i as usize, j as usize), grid);
             peaks.extend(reachable);
@@ -51,45 +70,23 @@ fn distinct_routes((i0, j0): Loc, grid: &Grid) -> u32 {
     peaks
 }
 
-fn parse_to_grid(input: &str) -> Grid {
-    input
-        .trim()
-        .lines()
-        .map(|l: &str| l.chars().map(|c: char| c.to_digit(10).unwrap()).collect())
-        .collect()
-}
-
-fn find_trailheads(grid: &Grid) -> Vec<Loc> {
-    let mut trailheads: Vec<Loc> = Vec::new();
-    for (i, row) in grid.iter().enumerate() {
-        for (j, v) in row.iter().enumerate() {
-            if *v == 0 {
-                trailheads.push((i, j));
-            }
-        }
-    }
-    // println!("Trailheads found: {:?}\t{:?}", trailheads.len(), trailheads);
-    trailheads
-}
-
 fn part1(input: &str) -> i32 {
     let mut sum = 0;
     let grid = parse_to_grid(input);
     let trailheads = find_trailheads(&grid);
     for (i0, j0) in trailheads.iter() {
-        // println!("Trailhead: {i0}, {j0}");
         let score = reachable_peaks((*i0, *j0), &grid).len();
         sum += score;
         // println!("Trailhead: {i0}, {j0}\tscore: {score}");
     }
     sum.try_into().unwrap()
 }
+
 fn part2(input: &str) -> i32 {
     let mut sum = 0;
     let grid = parse_to_grid(input);
     let trailheads = find_trailheads(&grid);
     for (i0, j0) in trailheads.iter() {
-        // println!("Trailhead: {i0}, {j0}");
         let score = distinct_routes((*i0, *j0), &grid);
         sum += score;
         // println!("Trailhead: {i0}, {j0}\tscore: {score}");
