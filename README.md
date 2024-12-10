@@ -42,9 +42,9 @@ Disclaimer: I [started learning Rust](https://gianluca.ai/tags/rust/) a few mont
 - [ ] Day 9
     - [ ] Part 1
     - [ ] Part 2
-- [ ] Day 10
+- [x] Day 10
     - [x] Part 1
-    - [ ] Part 2
+    - [x] Part 2
 
 
 ## Notes
