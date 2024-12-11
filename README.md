@@ -46,7 +46,7 @@ Disclaimer: I [started learning Rust](https://gianluca.ai/tags/rust/) a few mont
     - [x] Part 1
     - [x] Part 2
 - [ ] Day 11
-    - [ ] Part 1
+    - [x] Part 1
     - [ ] Part 2
 
 

@@ -7,9 +7,10 @@ fn part1(input: &str, blinks: u32) -> i32 {
         .map(|s| s.parse().unwrap())
         .collect();
 
-    println!("Stones: {stones:?}");
+    // println!("Stones: {stones:?}");
 
-    for _ in 0..blinks {
+    for b in 0..blinks {
+        println!("Blink {} of {}", b, blinks);
         let mut new: Vec<u64> = Vec::new();
         for s in stones {
             let digits = (s as f64).log10() as u32 + 1;
@@ -38,10 +39,14 @@ const _EXAMPLE: &str = "0 1 10 99 999";
 const _TESTCASE: &str = "125 17";
 
 pub fn run() {
-    println!("\n\nDay 11\n");
+    let input = fs::read_to_string("data/day11.txt").expect("Reading day11.txt");
+    println!("Day 11 part 1: {}", part1(&input, 25));
+    println!("Day 11 part 2: {}", part1(&input, 75));
+}
+
+#[test]
+fn p1() {
     assert_eq!(part1(_EXAMPLE, 1), 7);
     assert_eq!(part1(_TESTCASE, 6), 22);
     assert_eq!(part1(_TESTCASE, 25), 55312);
-    let input = fs::read_to_string("data/day11.txt").expect("Reading day11.txt");
-    println!("Day 11 part 1: {}", part1(&input, 25));
 }
