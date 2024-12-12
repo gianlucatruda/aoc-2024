@@ -49,6 +49,9 @@ Disclaimer: I [started learning Rust](https://gianluca.ai/tags/rust/) a few mont
     - [x] Part 1
     - [x] Part 2
     - [x] Optimised (was necessary for part 2 to work at all)
+- [ ] Day 12
+    - [ ] Part 1
+    - [ ] Part 2
 
 ## Notes
 
